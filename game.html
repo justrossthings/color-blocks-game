@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color Blocks Game</title>
+
+    <style>
+        .container {
+            padding-top: 40px;
+            width: 600px;
+            margin: auto;
+        }
+
+        .block {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            background-color: yellow;
+        }
+
+        .buttons {
+            font-size: 0;
+            float: right;
+            width: 200px;
+            height: 200px;
+        }
+
+        .buttons div {
+            display: inline-block;
+            width: 90px;
+            height: 90px;
+        }
+
+        .buttons div:nth-child(odd) {
+            margin-right: 20px;
+        }
+
+        .buttons div:nth-child(-n+2) {
+            margin-bottom: 20px;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .green {
+            background-color: green;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="block">
+    </div>
+    <div class="buttons">
+        <div class="red" data-color="red" onclick="pttrn(this)"></div>
+        <div class="yellow" data-color="yellow" onclick="pttrn(this)"></div>
+        <div class="blue" data-color="blue" onclick="pttrn(this)"></div>
+        <div class="green" data-color="green" onclick="pttrn(this)"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="block">
+    </div>
+    <div class="buttons">
+        <div class="red" data-color="red" onclick="pttrn(this)"></div>
+        <div class="yellow" data-color="yellow" onclick="pttrn(this)"></div>
+        <div class="blue" data-color="blue" onclick="pttrn(this)"></div>
+        <div class="green" data-color="green" onclick="pttrn(this)"></div>
+    </div>
+</div>
+
+
+<script>
+    var colors = ["red", "yellow", "blue", "green"];
+    var newColors = [];
+    var blocks = document.getElementsByClassName("block");
+
+    function randColor(colors) {
+        colors.sort(function () {
+            return .5 - Math.random();
+        })
+        return colors;
+    }
+
+    function randColorBlock(block, iteration) {
+        var newColors = randColor(colors);
+        //store color pattern as a data attribute to block
+        block.dataset.pattern = colors;
+        for (var i = 0; i < newColors.length; i++) {
+            (function (i, currColor) {
+                setTimeout(function () {
+                    block.style.backgroundColor = currColor;
+                }, i * 500);
+            })(i, newColors[i]);
+        }
+    }
+
+    for (var j = 0; j < blocks.length; j++) {
+        randColorBlock(blocks[j], j);
+    }
+
+    function pttrn(btn) {
+        var parent = btn.parentNode.parentNode.getElementsByClassName("block")[0];
+        var btnColor = btn.dataset.color;
+        //change parent block color
+        parent.style.backgroundColor = btnColor;
+        //turn parent block color pattern into an arr
+        var blockPattern = parent.dataset.pattern.split(',');
+        //compare top color pattern stack to clicked btn color
+        if (btnColor !== blockPattern[0]) {
+            alert("ya goofed!"); //wrong color
+        }
+        //remove first item from block pattern if selected color is correct
+        else {
+            blockPattern.shift();
+            parent.dataset.pattern = blockPattern;
+            if (!blockPattern.length) {
+                alert("you got it!"); //alert if input pattern was all correct
+            }
+        }
+    }
+
+</script>
+
+</body>
+</html>
